@@ -1,4 +1,4 @@
-# Luciano's ComfyUI Suite
+# LucianoTools ComfyUI Suite
 
 A collection of useful user interface extensions for ComfyUI to improve workflow and provide helpful feedback.
 
