@@ -6,7 +6,7 @@ A collection of useful user interface extensions for ComfyUI to improve workflow
 
 ## Features
 
-This suite currently includes two extensions, which can be enabled or disabled independently from the settings panel:
+This suite currently several extensions which can be enabled or disabled independently from the settings panel:
 
 #### 1. Batch Confirmation
 - **Safety Check:** Before running a workflow with a batch size greater than 1, a confirmation dialog will appear.
@@ -16,8 +16,14 @@ This suite currently includes two extensions, which can be enabled or disabled i
         <p>Batch Confirmation</p>
     </div>
 
+#### 2. Path Display
+- **File Path:** Shows the path of the output file for easy identification, both from the queue listing and on the large preview.
+    <div align="center">
+        <img src="" alt="Path Display" >
+        <p>Path Display</p>
+    </div>
 
-#### 2. Run Timer
+#### 3. Run Timer
 - **Live Timer:** Shows a `MM:SS` timer next to the "Queue Prompt" button while a prompt is running.
 - **Final Time:** Displays the final time with a success (✅) or error (❌) icon.
 - **Run History:** Click the timer to see a history of the last 5 run times.
@@ -79,11 +85,12 @@ After restarting, you should be able to install the suite via the Git URL withou
 
 ## Configuration
 
-Both extensions can be configured in the settings panel without needing to reload the UI.
+All extensions can be configured in the settings panel without needing to reload the UI.
 
 1.  Click the **Settings** icon (⚙️) in the ComfyUI menu.
 2.  Find the settings for **LucianoTools**:
     - `[✔] Run Timer`
+    - `[✔] Path Display`
     - `[✔] Confirm Batch Run`
 3.  Check or uncheck them as desired. The changes will apply instantly.
 
