@@ -89,5 +89,5 @@ Both extensions can be configured in the settings panel without needing to reloa
     <div align="center">
         <img src="" alt="Settings" >
         <p>Settings</p>
-    </div>
+    </div> 
 
