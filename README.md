@@ -3,7 +3,6 @@
 A collection of useful user interface extensions for ComfyUI to improve workflow and provide helpful feedback.
 
 ---
-
 ## Features
 
 This suite currently several extensions which can be enabled or disabled independently from the settings panel:
@@ -17,11 +16,11 @@ This suite currently several extensions which can be enabled or disabled indepen
     </div>
 
 #### 2. Path Display
-- **File Path:** Shows the path of the output file for easy identification, both from the queue listing and on the large preview.
-    <div align="center">
-        <img src="" alt="Path Display" >
-        <p>Path Display</p>
-    </div>
+- **File Path:** Shows the path of the output file for easy identification, both from the queue listing and on the preview.
+  
+| Queue Listing                       | Full Preview                           |
+| ----------------------------------- | ----------------------------------- |
+| ![cat](https://github.com/user-attachments/assets/ac8fcaf9-a4c2-44f4-9653-b6bd58deced4) | ![dog](https://github.com/user-attachments/assets/13874577-f054-45dc-b661-11b7ea809ed7) |
 
 #### 3. Run Timer
 - **Live Timer:** Shows a `MM:SS` timer next to the "Queue Prompt" button while a prompt is running.
@@ -95,7 +94,7 @@ All extensions can be configured in the settings panel without needing to reload
 3.  Check or uncheck them as desired. The changes will apply instantly.
 
     <div align="center">
-        <img src="https://github.com/user-attachments/assets/7b97956d-cf95-4608-ab44-4d425b2564e3" alt="Settings" >
+        <img src="https://github.com/user-attachments/assets/1146c72f-894a-44a2-ab5e-5786886e8c38" alt="Settings" >
         <p>Settings</p>
     </div> 
 
