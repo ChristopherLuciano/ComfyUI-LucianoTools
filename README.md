@@ -12,16 +12,28 @@ This suite currently includes two extensions, which can be enabled or disabled i
 - **Safety Check:** Before running a workflow with a batch size greater than 1, a confirmation dialog will appear.
 - **Prevents Accidental Runs:** Avoids accidentally starting a long render queue that you didn't intend to run.
     <div align="center">
+<<<<<<< HEAD
         <img src="" alt="Batch Confirmation" >
         <p>Batch Confirmation</p>
     </div>
 
+=======
+        <img src="https://github.com/user-attachments/assets/c7edc893-1991-4b6c-8e6f-8645b9f5e137" alt="Batch Confirmation" >
+        <p>Batch Confirmation</p>
+    </div>
+
+
+>>>>>>> 4a5c54410b575cf5eba926cc9bc9f381ae0461fe
 #### 2. Run Timer
 - **Live Timer:** Shows a `MM:SS` timer next to the "Queue Prompt" button while a prompt is running.
 - **Final Time:** Displays the final time with a success (✅) or error (❌) icon.
 - **Run History:** Click the timer to see a history of the last 5 run times.
     <div align="center">
+<<<<<<< HEAD
         <img src="" alt="Run Timer" >
+=======
+        <img src="https://github.com/user-attachments/assets/0b9ec2e7-18bf-4972-b77e-075a7bd8db0c" alt="Run Timer" >
+>>>>>>> 4a5c54410b575cf5eba926cc9bc9f381ae0461fe
         <p>Run Timer</p>
     </div>
 
@@ -87,7 +99,11 @@ Both extensions can be configured in the settings panel without needing to reloa
 3.  Check or uncheck them as desired. The changes will apply instantly.
 
     <div align="center">
+<<<<<<< HEAD
         <img src="" alt="Settings" >
+=======
+        <img src="https://github.com/user-attachments/assets/7b97956d-cf95-4608-ab44-4d425b2564e3" alt="Settings" >
+>>>>>>> 4a5c54410b575cf5eba926cc9bc9f381ae0461fe
         <p>Settings</p>
     </div> 
 
