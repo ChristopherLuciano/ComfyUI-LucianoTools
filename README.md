@@ -17,10 +17,11 @@ This suite currently several extensions which can be enabled or disabled indepen
 
 #### 2. Path Display
 - **File Path:** Shows the path of the output file for easy identification, both from the queue listing and on the preview.
+- **Image Size:** Shows the dimensions of the image in pixels.
   
 | Queue Listing                       | Full Preview                           |
 | ----------------------------------- | ----------------------------------- |
-| ![cat](https://github.com/user-attachments/assets/ac8fcaf9-a4c2-44f4-9653-b6bd58deced4) | ![dog](https://github.com/user-attachments/assets/13874577-f054-45dc-b661-11b7ea809ed7) |
+| ![queue](https://github.com/user-attachments/assets/ac8fcaf9-a4c2-44f4-9653-b6bd58deced4) | ![full](https://github.com/user-attachments/assets/435f4a57-5203-4f44-99d4-b7a51eb0d30e) |
 
 #### 3. Run Timer
 - **Live Timer:** Shows a `MM:SS` timer next to the "Queue Prompt" button while a prompt is running.
