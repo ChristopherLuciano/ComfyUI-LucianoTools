@@ -59,33 +59,49 @@ const imageViewerPath = {
         this.observer = observer; 
     },
 
-    extractFilename(imageElement) {
+    
+    extractImageData(imageElement) {
         if (!imageElement) return null;
+        
         const srcUrl = imageElement.getAttribute("src");
         if (!srcUrl) return null;
+
         const query = srcUrl.split('?')[1];
         if (!query) return null;
+        
         const urlParams = new URLSearchParams(query);
-        return urlParams.get('filename');
-    },
+        const filename = urlParams.get('filename');
+        
+        // Get the intrinsic dimensions of the loaded image
+        const width = imageElement.naturalWidth;
+        const height = imageElement.naturalHeight;
 
-    extractFilenameFromActiveSlide(maskElement) {
+        if (!filename || !width || !height) return null;
+
+        return { filename, width, height };
+    },
+	 // CHANGED: This function is now renamed to be more descriptive
+    extractImageDataFromActiveSlide(maskElement) {
         const activeItem = maskElement.querySelector('.p-galleria-item[data-p-active="true"]') ||
                            maskElement.querySelector('.p-galleria-item:not([style*="display: none"])');
         
-        if (!activeItem) return this.extractFilename(maskElement.querySelector('img.galleria-image'));
+        let imageElement;
+        if (activeItem) {
+            imageElement = activeItem.querySelector('img.galleria-image');
+        } else {
+            imageElement = maskElement.querySelector('img.galleria-image');
+        }
         
-        const imageElement = activeItem.querySelector('img.galleria-image'); 
-        return this.extractFilename(imageElement);
+        return this.extractImageData(imageElement);
     },
-    
+    // CHANGED: This function now formats the new data
     updatePathDisplay(maskElement) {
         if (!this.enabled) return;
-        const updatedFilename = this.extractFilenameFromActiveSlide(maskElement);
+        const imageData = this.extractImageDataFromActiveSlide(maskElement);
         const pathOverlay = maskElement.querySelector('#luciano-viewer-path');
 
-        if (updatedFilename && pathOverlay) {
-            pathOverlay.textContent = `output/${updatedFilename}`;
+        if (imageData && pathOverlay) {
+            pathOverlay.textContent = `output/${imageData.filename} (${imageData.width}x${imageData.height})`;
         }
     },
 
@@ -105,7 +121,7 @@ const imageViewerPath = {
         this.navigationObserver.observe(galleriaComponentRoot, config);
     },
     
-    handleModalInjection(maskElement) {
+   handleModalInjection(maskElement) {
         if (!this.enabled) return;
         if (maskElement.hasAttribute('data-luciano-initialized')) {
             this.updatePathDisplay(maskElement);
@@ -113,13 +129,15 @@ const imageViewerPath = {
         }
         maskElement.setAttribute('data-luciano-initialized', 'true');
 
-        const filename = this.extractFilenameFromActiveSlide(maskElement);
-        if (!filename) return;
+        const imageData = this.extractImageDataFromActiveSlide(maskElement); // CHANGED
+        if (!imageData) return;
 
-        const relativePath = `output/${filename}`;
+        // CHANGED: Format the new text
+        const fullPathText = `output/${imageData.filename} (${imageData.width} x ${imageData.height})`;
+
         const pathOverlay = document.createElement("div");
         pathOverlay.id = "luciano-viewer-path";
-        pathOverlay.textContent = relativePath;
+        pathOverlay.textContent = fullPathText;
         
         const viewerContent = maskElement.querySelector('.p-galleria-content');
         if (viewerContent) {
@@ -137,6 +155,7 @@ const imageViewerPath = {
                  this.observeNavigation(galleriaItemsContainer);
             }
         }
+    
     }
 };
 
@@ -283,7 +302,7 @@ app.registerExtension({
         app.ui.settings.addSetting({
             id: settingId,
             name: "Enable Path Display",
-            tooltip: "Adds a 'Show Path' tooltip to the context menu and an overlay on the full-screen image viewer.",
+            tooltip: "Adds a 'Show Path' tooltip to the context menu and an informational overlay on the full-screen image viewer.",
             type: "boolean",
             defaultValue: true,
             category: ["LucianoTools", "Path Display", "PathDisplay"],
