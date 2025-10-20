@@ -1,0 +1,18 @@
+[project]
+name = "ComfyUI-LucianoTools"
+version = "0.1.0"
+description = "A suite of tools / frontend extensions for ComfyUI (path display, run timer, etc.)"
+license = { file = "LICENSE" }
+requires-python = ">=3.9"
+dependencies = [
+]
+
+[project.urls]
+Repository = "https://github.com/ChristopherLuciano/ComfyUI-LucianoTools"
+Documentation = "https://github.com/ChristopherLuciano/ComfyUI-LucianoTools/blob/main/README.md"
+
+[tool.comfy]
+PublisherId = "ChristopherLuciano"
+DisplayName = "ComfyUI-LucianoTools"
+requires-comfyui = ">=1.0.0"
+web_directory = "js"
