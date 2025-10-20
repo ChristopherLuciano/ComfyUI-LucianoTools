@@ -59,7 +59,6 @@ const imageViewerPath = {
         this.observer = observer; 
     },
 
-    
     extractImageData(imageElement) {
         if (!imageElement) return null;
         
@@ -71,16 +70,21 @@ const imageViewerPath = {
         
         const urlParams = new URLSearchParams(query);
         const filename = urlParams.get('filename');
-        
-        // Get the intrinsic dimensions of the loaded image
+        const subfolder = urlParams.get('subfolder'); // Get the subfolder parameter
+
+        if (subfolder) {
+            const decodedSubfolder = decodeURIComponent(subfolder);
+            subfolder = decodedSubfolder.replaceAll('\\', '/');
+        }
+
         const width = imageElement.naturalWidth;
         const height = imageElement.naturalHeight;
 
         if (!filename || !width || !height) return null;
 
-        return { filename, width, height };
+        return { filename, subfolder, width, height }; // Return the subfolder
     },
-	 // CHANGED: This function is now renamed to be more descriptive
+
     extractImageDataFromActiveSlide(maskElement) {
         const activeItem = maskElement.querySelector('.p-galleria-item[data-p-active="true"]') ||
                            maskElement.querySelector('.p-galleria-item:not([style*="display: none"])');
@@ -94,14 +98,19 @@ const imageViewerPath = {
         
         return this.extractImageData(imageElement);
     },
-    // CHANGED: This function now formats the new data
+    
     updatePathDisplay(maskElement) {
         if (!this.enabled) return;
         const imageData = this.extractImageDataFromActiveSlide(maskElement);
         const pathOverlay = maskElement.querySelector('#luciano-viewer-path');
 
         if (imageData && pathOverlay) {
-            pathOverlay.textContent = `output/${imageData.filename} (${imageData.width}x${imageData.height})`;
+            let relativePath = "output/";
+            if (imageData.subfolder) {
+                relativePath += imageData.subfolder + "/";
+            }
+            relativePath += imageData.filename;
+            pathOverlay.textContent = `${relativePath} (${imageData.width}x${imageData.height})`;
         }
     },
 
@@ -121,7 +130,7 @@ const imageViewerPath = {
         this.navigationObserver.observe(galleriaComponentRoot, config);
     },
     
-   handleModalInjection(maskElement) {
+    handleModalInjection(maskElement) {
         if (!this.enabled) return;
         if (maskElement.hasAttribute('data-luciano-initialized')) {
             this.updatePathDisplay(maskElement);
@@ -129,11 +138,15 @@ const imageViewerPath = {
         }
         maskElement.setAttribute('data-luciano-initialized', 'true');
 
-        const imageData = this.extractImageDataFromActiveSlide(maskElement); // CHANGED
+        const imageData = this.extractImageDataFromActiveSlide(maskElement);
         if (!imageData) return;
 
-        // CHANGED: Format the new text
-        const fullPathText = `output/${imageData.filename} (${imageData.width} x ${imageData.height})`;
+        let relativePath = "output/";
+        if (imageData.subfolder) {
+            relativePath += imageData.subfolder + "/";
+        }
+        relativePath += imageData.filename;
+        const fullPathText = `${relativePath} (${imageData.width}x${imageData.height})`;
 
         const pathOverlay = document.createElement("div");
         pathOverlay.id = "luciano-viewer-path";
@@ -155,7 +168,6 @@ const imageViewerPath = {
                  this.observeNavigation(galleriaItemsContainer);
             }
         }
-    
     }
 };
 
@@ -164,7 +176,7 @@ const imageViewerPath = {
 // =================================================================================
 const contextMenuPath = {
     ITEM_SELECTOR: ".task-item", 
-    lastClickedFilename: null, 
+    lastClickedPath: null, 
     observer: null,
     rightClickHandler: null,
     enabled: false,
@@ -215,7 +227,7 @@ const contextMenuPath = {
 
     _handleRightClick(e) {
         if (!this.enabled) return;
-        this.lastClickedFilename = null;
+        this.lastClickedPath = null;
         const item = e.target.closest(this.ITEM_SELECTOR); 
         if (item) {
             const imgElement = item.querySelector(".task-output-image"); 
@@ -226,7 +238,14 @@ const contextMenuPath = {
                     if (query) {
                         const urlParams = new URLSearchParams(query);
                         const filename = urlParams.get('filename'); 
-                        if (filename) this.lastClickedFilename = filename;
+                        const subfolder = urlParams.get('subfolder');
+                        if (filename) {
+                            let relativePath = "output/";
+                            if (subfolder) {
+                                relativePath += subfolder + "/";
+                            }
+                            this.lastClickedPath = relativePath + filename;
+                        }
                     }
                 }
             }
@@ -247,7 +266,7 @@ const contextMenuPath = {
                 for (const node of mutation.addedNodes) {
                     if (!(node instanceof HTMLElement) || !node.classList.contains('p-contextmenu')) continue;
                     const menuRoot = node;
-                    if (this.lastClickedFilename && !menuRoot.hasAttribute('data-luciano-processed')) {
+                    if (this.lastClickedPath && !menuRoot.hasAttribute('data-luciano-processed')) { 
                         menuRoot.setAttribute('data-luciano-processed', 'true');
                         const menuList = menuRoot.querySelector('.p-contextmenu-root-list');
                         if (!menuList) continue;
@@ -258,9 +277,9 @@ const contextMenuPath = {
                             <div class="p-contextmenu-item-content"><a class="p-contextmenu-item-link" style="cursor: default;" tabindex="-1"><span class="p-contextmenu-item-icon pi pi-info-circle"></span><span class="p-contextmenu-item-label">Show Path</span></a></div>
                         `;
                         newItem.onmouseenter = (e) => {
-                            const filename = this.lastClickedFilename;
-                            if (!filename) return;
-                            const pathText = `Path: output/${filename}`;
+                            const path = this.lastClickedPath; 
+                            if (!path) return;
+                            const pathText = `Path: ${path}`; 
                             const rect = e.currentTarget.getBoundingClientRect();
                             this.manageTooltip({ clientX: rect.right, clientY: rect.top }, pathText, true);
                         };
@@ -270,7 +289,7 @@ const contextMenuPath = {
                 }
                 for (const node of mutation.removedNodes) {
                      if (!(node instanceof HTMLElement) || !node.classList.contains('p-contextmenu')) continue;
-                     this.lastClickedFilename = null;
+                     this.lastClickedPath = null; 
                      this.manageTooltip(null, null, false);
                 }
             }
@@ -281,7 +300,7 @@ const contextMenuPath = {
 };
 
 // =================================================================================
-// Main Controller and Settings
+// Main Controller and Settings 
 // =================================================================================
 const pathDisplayController = {
     setup() {
@@ -298,14 +317,13 @@ app.registerExtension({
     name: "LucianoTools.PathDisplay",
     setup(app) {
         const settingId = "Luciano.PathDisplay.Enabled";
-
         app.ui.settings.addSetting({
             id: settingId,
-            name: "Enable Path Display",
-            tooltip: "Adds a 'Show Path' tooltip to the context menu and an informational overlay on the full-screen image viewer.",
+            name: "Luciano's Suite: Enable Path Display",
+            tooltip: "Adds a 'Show Path' tooltip to the context menu and an overlay on the full-screen image viewer.",
             type: "boolean",
             defaultValue: true,
-            category: ["LucianoTools", "Path Display", "PathDisplay"],
+            category: "Luciano's Suite",
             onChange: (isEnabled) => {
                 if (isEnabled) {
                     pathDisplayController.setup();
@@ -314,8 +332,6 @@ app.registerExtension({
                 }
             },
         });
-        
-        // Initial setup on page load
         if (app.ui.settings.getSettingValue(settingId)) {
             pathDisplayController.setup();
         }
