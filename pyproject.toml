@@ -12,7 +12,7 @@ Repository = "https://github.com/ChristopherLuciano/ComfyUI-LucianoTools"
 Documentation = "https://github.com/ChristopherLuciano/ComfyUI-LucianoTools/blob/main/README.md"
 
 [tool.comfy]
-PublisherId = "ChristopherLuciano"
+PublisherId = "christopher-luciano"
 DisplayName = "ComfyUI-LucianoTools"
 requires-comfyui = ">=1.0.0"
 web_directory = "js"
