@@ -59,6 +59,16 @@ const imageViewerPath = {
         this.observer = observer; 
     },
 
+    computeRelativePath(filename, subfolder) {
+        let relativePath = "output/";
+        if (subfolder) {
+            const decodedSubfolder = decodeURIComponent(subfolder);
+            const normalizedSubfolder = decodedSubfolder.replaceAll('\\', '/');
+            relativePath += normalizedSubfolder + "/";
+        }
+        return relativePath + filename;
+    },
+
     extractImageData(imageElement) {
         if (!imageElement) return null;
         
@@ -70,19 +80,14 @@ const imageViewerPath = {
         
         const urlParams = new URLSearchParams(query);
         const filename = urlParams.get('filename');
-        const subfolder = urlParams.get('subfolder'); // Get the subfolder parameter
-
-        if (subfolder) {
-            const decodedSubfolder = decodeURIComponent(subfolder);
-            subfolder = decodedSubfolder.replaceAll('\\', '/');
-        }
+        const subfolder = urlParams.get('subfolder');
 
         const width = imageElement.naturalWidth;
         const height = imageElement.naturalHeight;
 
         if (!filename || !width || !height) return null;
 
-        return { filename, subfolder, width, height }; // Return the subfolder
+        return { filename, subfolder, width, height };
     },
 
     extractImageDataFromActiveSlide(maskElement) {
@@ -105,11 +110,7 @@ const imageViewerPath = {
         const pathOverlay = maskElement.querySelector('#luciano-viewer-path');
 
         if (imageData && pathOverlay) {
-            let relativePath = "output/";
-            if (imageData.subfolder) {
-                relativePath += imageData.subfolder + "/";
-            }
-            relativePath += imageData.filename;
+            const relativePath = this.computeRelativePath(imageData.filename, imageData.subfolder);
             pathOverlay.textContent = `${relativePath} (${imageData.width}x${imageData.height})`;
         }
     },
@@ -141,12 +142,8 @@ const imageViewerPath = {
         const imageData = this.extractImageDataFromActiveSlide(maskElement);
         if (!imageData) return;
 
-        let relativePath = "output/";
-        if (imageData.subfolder) {
-            relativePath += imageData.subfolder + "/";
-        }
-        relativePath += imageData.filename;
-        const fullPathText = `${relativePath} (${imageData.width}x${imageData.height})`;
+        const relativePath = this.computeRelativePath(imageData.filename, imageData.subfolder);
+        const fullPathText = `${relativePath} (${imageData.width} x ${imageData.height})`;
 
         const pathOverlay = document.createElement("div");
         pathOverlay.id = "luciano-viewer-path";
@@ -240,11 +237,7 @@ const contextMenuPath = {
                         const filename = urlParams.get('filename'); 
                         const subfolder = urlParams.get('subfolder');
                         if (filename) {
-                            let relativePath = "output/";
-                            if (subfolder) {
-                                relativePath += subfolder + "/";
-                            }
-                            this.lastClickedPath = relativePath + filename;
+                            this.lastClickedPath = imageViewerPath.computeRelativePath(filename, subfolder);
                         }
                     }
                 }
