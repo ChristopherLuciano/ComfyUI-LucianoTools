@@ -225,7 +225,6 @@ const contextMenuPath = {
         `;
     },
 
-    // CHANGED: This function now captures the full path
     _handleRightClick(e) {
         if (!this.enabled) return;
         this.lastClickedPath = null;
