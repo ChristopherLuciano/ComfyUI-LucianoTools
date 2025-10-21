@@ -1,6 +1,6 @@
 [project]
 name = "ComfyUI-LucianoTools"
-version = "0.1.2"
+version = "0.1.3"
 description = "A suite of tools / frontend extensions for ComfyUI (path display, run timer, etc.)"
 license = { file = "LICENSE" }
 requires-python = ">=3.9"

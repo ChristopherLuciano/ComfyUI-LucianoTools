@@ -323,7 +323,7 @@ app.registerExtension({
             tooltip: "Adds a 'Show Path' tooltip to the context menu and an overlay on the full-screen image viewer.",
             type: "boolean",
             defaultValue: true,
-            category: "Luciano's Suite",
+           category: ["LucianoTools", "Path Display", "PathDisplay"],
             onChange: (isEnabled) => {
                 if (isEnabled) {
                     pathDisplayController.setup();
